@@ -8,13 +8,16 @@
             </div>
             <div class="login">
                 <div class="row">
-                    <form class="col s12" method="post" action="{{url('admin/doaddgoods')}}" enctype="multipart/form-data">
+                    <form class="col s12" method="post" action="{{url('goods/doaddgoods')}}" enctype="multipart/form-data">
                     @csrf
                         <div class="input-field">
                             <input type="text" name="goods_name" class="validate" placeholder="NAME" required>
                         </div>
                         <div class="input-field">
-                            <input type="password" name="goods_price" class="validate" placeholder="PRICE" required>
+                            <input type="text" name="goods_num" class="validate" placeholder="NUM" required>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" name="goods_price" class="validate" placeholder="PRICE" required>
                         </div>
                         <div class="input-field">
                             <input type="file" name="goods_pic" class="validate" placeholder="PIC" required>

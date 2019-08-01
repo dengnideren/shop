@@ -7,52 +7,101 @@ use App\Http\Controllers\Controller;
 use DB;
 class IndexController extends Controller
 {
-    //登录
-    public function login(Request $request)
+    public function index(Request $request)
     {
-        return view('home/login');
+        // $data=$request->all();
+        $res=DB::table('goods')->get();
+        // dd($res);
+        return view('home/index',['goods'=>$res]);
     }
-    public function dologin(Request $request)
+    //详情页
+    public function single(Request $request)
     {
         $data=$request->all();
         // dd($data);
-        $name=$data['name'];
-        $request->session()->put('name',$name);
-        // dd($request->session());
-        $name1=session('name');
         $where=[
-            ['name','=',$name],
+            'id'=>$data['id'],
         ];
-        $res=DB::table('register')->where($where)->select('name')->get()->toArray();
-        $name2=array_column($res,'name');
-        if($name1==$name2[0]){
-            return redirect('home/register');
+        // dd($where);
+        $res=DB::table('goods')->where($where)->get();
+        // dd($res);
+        return view('home/single',['goods'=>$res]);
+    }
+    // 购物车视图
+    public function cart_do(Request $request)
+    {
+        $uid = session('id');
+        if($uid==null){
+            echo ("<script>alert('请先登录');location='/home/login'</script>");
+        }
+        // dd($uid);
+        $data =DB::table('cart')->where(['uid'=>$uid])->get();
+        // dd($data);
+        return view('home/cart',['data'=>$data]);
+    }
+    // 加入购物车
+    public function cart(Request $request)
+    {
+        $id = $request->get('id');
+        // dd($id);
+        $uid = session('id');
+        // dd($uid);
+        $data =DB::table('goods')->where(['id'=>$id])->first();
+        // dd($data);
+
+        $data=get_object_vars($data);
+        $res =DB::table('cart')->where(['id'=>$id])->insert([
+            'uid'=>$uid,
+            'goods_name'=>$data['goods_name'],
+            'goods_id'=>$data['id'],
+            'goods_pic'=>$data['goods_pic'],
+            'goods_price'=>$data['goods_price'],
+            'add_time'=>time(),
+        ]);
+        // $cate=DB::table('cart')->select('goods_id')->get();
+        // $cate=get_object_vars($cate);
+        // if($cate['goods_id']==$data['id']){
+        //     echo ("<script>alert('该商品已存在');location='/home/index'</script>");
+        // }
+        // dd($res);
+        if($res){
+            echo ("<script>alert('加入购物车成功,跳转到购物车页面');location='/home/cart_do'</script>");
         }else{
-            return redirect('home/login');
+            echo ("<script>alert('加入失败');location='/home/buy'</script>");
         }
     }
-    //注册
-    public function register(Request $request)
+    //确认订单
+    public function listdo(Request $request)
     {
-        return view('home/register');
+        // $data=$request->get('id');
+        $data=DB::table('cart')->get();
+        // dd($data);
+        return view('home/list',['data'=>$data]);
     }
-    public function doregister(Request $request)
+    //订单添加
+    public function listadd(Request $request)
     {
-        $validate=$request->validate([
-                'name'=>'unique:shop_register',
-            ],['name.unique'=>'该名称已被注册']);
-        $data=$request->all();
-        $res=DB::table('register')->insert([
-                'name'=>$data['name'],
-                'email'=>$data['email'],
-                'pwd'=>$data['pwd'],
-                'add_time'=>time(),
+        $id=$request->get('id');
+        // dd($data);
+         $uid = session('id');
+        // dd($uid);
+        // 订单编号
+        $oid = time().rand(1000,9999);
+        // dd($oid);
+        $data =DB::table('cart')->where(['id'=>$id])->first();
+        // dd($data);
+        $data=get_object_vars($data);
+        $res =DB::table('order')->insert([
+            'oid'=>$oid,
+            'uid'=>$uid,
+            'pay_money'=>$data['goods_price'],
+            'pay_time'=>time(),
+            'add_time'=>time()
         ]);
         // dd($res);
         if($res){
-            return redirect('home/login');
-        }else{
-            echo "注册失败";
+            echo ("<script>alert('正在前往支付页面');location='/pay'</script>");
         }
     }
+
 }

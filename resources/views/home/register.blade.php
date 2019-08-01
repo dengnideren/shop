@@ -22,9 +22,6 @@
                             <input type="text" name="name" class="validate" placeholder="NAME" required>
                         </div>
                         <div class="input-field">
-                            <input type="email" name="email" placeholder="EMAIL" class="validate" required>
-                        </div>
-                        <div class="input-field">
                             <input type="password" name="pwd" placeholder="PASSWORD" class="validate" required>
                         </div>
                         <input type="submit" class="btn button-default" value="REGISTER">
