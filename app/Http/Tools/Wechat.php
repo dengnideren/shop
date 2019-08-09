@@ -140,7 +140,7 @@ class Wechat{
          $redis= new \Redis();
          $redis->connect('127.0.0.1','6379');
         //  dd($redis->connect);
-         $access_token_key='wechat_access_token';
+         $access_token_key='wechat_access_token11';
         if($redis->exists($access_token_key)){
             //去缓存拿
             $access_token=$redis->get($access_token_key);
