@@ -58,8 +58,8 @@ Route::post('/wechat/push_label_message_do','Home\WechatController@push_label_me
 
 
 //登录
-Route::get('/login/login','Admin\loginController@login');
-Route::post('/admin/dologin','Admin\loginController@dologin');
+Route::get('/login/login','Admin\LoginController@login');
+Route::post('/admin/dologin','Admin\LoginController@dologin');
 //新闻添加
 Route::get('/news/create','Admin\NewsController@create');
 Route::post('/news/save','Admin\NewsController@save');
@@ -73,22 +73,22 @@ Route::get('/news_info','Admin\NewsController@info');
 //注册
 Route::get('/register/reg','Admin\RegisterController@reg');
 //车库
-Route::get('/kaoshi/login','Admin\kaoshiController@login');
-Route::post('dologin','Admin\kaoshiController@dologin');
-Route::get('logout','Admin\kaoshiController@logout');
+Route::get('/kaoshi/login','Admin\KaoshiController@login');
+Route::post('dologin','Admin\KaoshiController@dologin');
+Route::get('logout','Admin\KaoshiController@logout');
 Route::middleware(['logindo'])->group(function(){
-    Route::get('/car/index','Admin\kaoshiController@index');
-    Route::get('addcar','Admin\kaoshiController@addcar');
-    Route::post('doaddcar','Admin\kaoshiController@doaddcar');
-    Route::get('addmenwei','Admin\kaoshiController@addmenwei');
-    Route::post('doaddmenwei','Admin\kaoshiController@doaddmenwei');
-    Route::get('admin','Admin\kaoshiController@admin');
-    Route::get('carin','Admin\kaoshiController@carin');
-    Route::post('docarin','Admin\kaoshiController@docarin');
-    Route::get('carout','Admin\kaoshiController@carout');
-    Route::post('docarout','Admin\kaoshiController@docarout');
-    Route::get('detail','Admin\kaoshiController@detail');
-    Route::get('info','Admin\kaoshiController@info');
+    Route::get('/car/index','Admin\KaoshiController@index');
+    Route::get('addcar','Admin\KaoshiController@addcar');
+    Route::post('doaddcar','Admin\KaoshiController@doaddcar');
+    Route::get('addmenwei','Admin\KaoshiController@addmenwei');
+    Route::post('doaddmenwei','Admin\KaoshiController@doaddmenwei');
+    Route::get('admin','Admin\KaoshiController@admin');
+    Route::get('carin','Admin\KaoshiController@carin');
+    Route::post('docarin','Admin\KaoshiController@docarin');
+    Route::get('carout','Admin\KaoshiController@carout');
+    Route::post('docarout','Admin\KaoshiController@docarout');
+    Route::get('detail','Admin\KaoshiController@detail');
+    Route::get('info','Admin\KaoshiController@info');
 });
 
 
