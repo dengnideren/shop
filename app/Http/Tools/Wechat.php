@@ -147,7 +147,6 @@ class Wechat{
         }else{
             $access_re = file_get_contents("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WECHAT_APPID')."&secret=".env('WECHAT_APPSECRET'));
             $access_result=json_decode($access_re,1);
-            dd($access_result);
             $access_token=$access_result['access_token'];
             $expire_time=$access_result['expires_in'];
             //加入缓存
