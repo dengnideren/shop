@@ -11,6 +11,7 @@
 |
 */
 //用户列表
+Route::get('/wechat/event','Home\WechatController@event');
 Route::get('/wechat/get_user_list','Home\WechatController@get_user_list');
 Route::get('/wechat/get_user_info','Home\WechatController@get_user_info');
 Route::get('/wechat/get_access_token','Home\WechatController@get_access_token');
