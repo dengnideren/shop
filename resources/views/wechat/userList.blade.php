@@ -28,11 +28,11 @@
                     </td>
                     <td>{{$v->id}}</td>
                     <td>{{$v->openid}}</td>
-                    <td>{{$v->add_time}}</td>
+                    <td>{{date('Y-m-d H:i:s',$v->add_time)}}</td>
                     @if($v->subscribe==1)
-                    <td>已关注</td>
-                    @else
                     <td>未关注</td>
+                    @else
+                    <td>已关注</td>
                     @endif
                     <td>
                         <a href="{{url('wechat/get_user_list')}}?id={{$v->id}}">详情</a> |

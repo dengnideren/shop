@@ -20,6 +20,11 @@ class WechatController extends Controller
         $this->request = $request;
         $this->wechat = $wechat;
     }
+    public function event()
+    {
+        echo $_GET['echostr'];
+        die;
+    }
     public function get_user_info()
     {
         $access_token=$this->wechat->get_access_token();
@@ -314,7 +319,7 @@ class WechatController extends Controller
     {
         $data = $this->wechat->wechat_tag_list();
         // dd($data);
-        return view('Wechat/tagList',['info'=>$data['tags']]);
+        return view('wechat/tagList',['info'=>$data['tags']]);
     }
     // 编辑标签视图
     public function label_update(Request $request){
