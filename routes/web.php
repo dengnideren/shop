@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//生成带参数的二维码
+Route::get('/wechat/ticket','Home\WechatController@ticket');
+Route::get('/wechat/ticketdo','Home\WechatController@ticketdo');
 //用户列表
 Route::post('/wechat/event','Home\WechatController@event');
 Route::get('/wechat/get_user_list','Home\WechatController@get_user_list');

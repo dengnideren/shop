@@ -20,6 +20,32 @@ class WechatController extends Controller
         $this->request = $request;
         $this->wechat = $wechat;
     }
+    public function ticket()
+    {
+        $url='https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->wechat->get_access_token();
+        // dd($url);
+        $data=[
+            'action_name'=>'QR_LIMIT_SCENE',
+            'action_info'=>
+                ['scene'=>[
+                'scene_id'=>'123'
+                ]
+            ]
+        ];
+        $data=json_encode($data);
+         $re = $this->wechat->post($url,$data);
+         dd($re);
+        // dd($data);
+    }
+    //获取二维码i
+    public function ticketdo()
+    {
+        $ticket=UrlEncode('gQEm8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZ2VuTlI0OVdhVFQxMDAwME0wM3UAAgRJT1FdAwQAAAAA');
+        // dd($ticket);
+        $url='https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$ticket;
+        // dd($url);
+        header("location:$url");
+    }
     /**
      * 微信消息推送
      */
