@@ -20,51 +20,41 @@ class WechatController extends Controller
         $this->request = $request;
         $this->wechat = $wechat;
     }
-    public function ticket()
-    {
-        $url='https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->wechat->get_access_token();
-        // dd($url);
-        $data=[
-            'action_name'=>'QR_LIMIT_SCENE',
-            'action_info'=>
-                ['scene'=>[
-                'scene_id'=>'123'
-                ]
-            ]
-        ];
-        $data=json_encode($data);
-         $re = $this->wechat->post($url,$data);
-         dd($re);
-        // dd($data);
-    }
-    //获取二维码i
-    public function ticketdo()
-    {
-        $ticket=UrlEncode('gQEm8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZ2VuTlI0OVdhVFQxMDAwME0wM3UAAgRJT1FdAwQAAAAA');
-        // dd($ticket);
-        $url='https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$ticket;
-        // dd($url);
-        header("location:$url");
-    }
     /**
      * 微信消息推送
      */
     public function event()
     {
         //$this->checkSignature();
-        $data = file_get_contents("php://input");
-        // dd($data);
+         $data = file_get_contents("php://input");
         //解析XML
         $xml = simplexml_load_string($data,'SimpleXMLElement', LIBXML_NOCDATA);        //将 xml字符串 转换成对象
         $xml = (array)$xml; //转化成数组
-        // dd($xml);
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
-        // dd($log_str);
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
-        \Log::Info(json_encode($xml));
-        $message = '你好!';
-        $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName ><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
-        echo $xml_str;
+        if($xml['MsgType'] == 'event'){
+            if($xml['Event'] == 'subscribe'){ //关注
+                if(isset($xml['EventKey'])){
+                    //拉新操作
+                    $agent_code = explode('_',$xml['EventKey'])[1];
+                    $agent_info = DB::connection('mysql')->table('user_agent')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
+                    if(empty($agent_info)){
+                        DB::connection('mysql')->table('user_agent')->insert([
+                            'uid'=>$agent_code,
+                            'openid'=>$xml['FromUserName'],
+                            'add_time'=>time()
+                        ]);
+                    }
+                }
+                $message = '你好!';
+                $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
+                echo $xml_str;
+            }
+        }elseif($xml['MsgType'] == 'text'){
+            $message = '你好!';
+            $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
+            echo $xml_str;
+        }
         //echo $_GET['echostr'];
     }
     public function get_user_info()

@@ -11,10 +11,12 @@
 |
 */
 //生成带参数的二维码
-Route::get('/wechat/ticket','Home\WechatController@ticket');
-Route::get('/wechat/ticketdo','Home\WechatController@ticketdo');
+Route::get('/agent/user_list','Home\AgentController@user_list');
+Route::get('/agent/create_qrcode','Home\AgentController@create_qrcode');
+//用户推广用户列表
+Route::get('/agent/agent_list','Home\AgentController@agent_list');
 //用户列表
-Route::post('/wechat/event','Home\WechatController@event');
+Route::get('/wechat/event','Home\WechatController@event');
 Route::get('/wechat/get_user_list','Home\WechatController@get_user_list');
 Route::get('/wechat/get_user_info','Home\WechatController@get_user_info');
 Route::get('/wechat/get_access_token','Home\WechatController@get_access_token');
