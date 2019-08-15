@@ -130,35 +130,6 @@ class MenuController extends Controller
         }
         // echo "<pre>";print_r($data);
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->wechat->get_access_token();
-        // $data = [
-        //     'button' => [
-        //         [
-        //             'type'=>'click',
-        //             'name'=>'主人',
-        //             'key'=>'V1001_TODAY_MUSIC'
-        //         ],
-        //         [
-        //             'name'=>'三陪',
-        //             'sub_button' =>[
-        //                 [
-        //                     'type'=>'view',
-        //                     'name'=>'陪睡',
-        //                     'url'=>'http://www.soso.com/'
-        //                 ],
-        //                 [
-        //                     "type"=>"click",
-        //                     "name"=>"陪吃",
-        //                     "key"=>"V1001_GOOD"
-        //                 ]
-        //             ]
-        //         ],
-        //         [
-        //             'type'=>'click',
-        //             'name'=>'欢迎光临',
-        //             'key'=>'V1001_TODAY_MUSIC111'
-        //         ]
-        //     ],
-        // ];
         $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
         echo json_encode($data,JSON_UNESCAPED_UNICODE).'<br/>';
         echo "<pre>"; print_r(json_decode($re,1));
