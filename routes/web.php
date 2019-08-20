@@ -10,6 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// 留言授权登录
+Route::get('/message/login','Home\MessageController@login');  //微信授权登录
+Route::get('/message/code','Home\MessageController@code');  //微信授权登录
+Route::get('/message/send_message','Home\MessageController@send_message');  //微信留言
+Route::post('/message/send_message_do','Home\MessageController@send_message_do');  //微信留言
 //微信菜单
 Route::get('/menu/menu_list','Home\MenuController@menu_list');
 Route::get('/menu/del_menu','Home\MenuController@del_menu');  //完全删除菜单
@@ -19,6 +24,7 @@ Route::get('/menu/reload_menu','Home\MenuController@reload_menu');  //刷新菜�
 //生成带参数的二维码
 Route::get('/agent/user_list','Home\AgentController@user_list');
 Route::get('/agent/create_qrcode','Home\AgentController@create_qrcode');
+Route::post('/agent/signature','Home\AgentController@signature');  //分享签名
 //用户推广用户列表
 Route::get('/agent/agent_list','Home\AgentController@agent_list');
 //用户列表

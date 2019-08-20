@@ -37,6 +37,7 @@
                     <td>
                         <a href="{{url('wechat/get_user_list')}}?id={{$v->id}}">详情</a> |
                         <a href="{{url('wechat/label_user_list')}}?openid={{$v->openid}}">获取标签</a>
+                        <a href="{{url('message/send_message')}}?openid={{$v->openid}}">留言</a>
                     </td>
                 </tr>
             @endforeach

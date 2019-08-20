@@ -13,7 +13,7 @@
         <h1>欢迎使用haAdmin</h1><br>
         <input type="text" name="name" placeholder="用户名"><br>
         <input type="password" name="pwd" placeholder="密码"><br>
-        <a href="{{url('wechat/login')}}">第三方合作账户登录</a>
+        <a href="{{url('message/login')}}">微信登录</a>
         <input type="submit" value="登录">
     </form>
     </center>

@@ -108,7 +108,7 @@ class Wechat{
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->get_access_token();
         $data = [
             'touser'=>$openid,
-            'template_id'=>'NQuFYKQJ6NWVcbR4B0ycyzXwblCgMWF5PrW42LgKAWU',
+            'template_id'=>'rwU1i2NPPjXoKDzWt7A-9wNcUtesvYpMOszU0bM4aCM',
             'url'=>'http://www.baidu.com',
             'data' => [
                 'first' => [

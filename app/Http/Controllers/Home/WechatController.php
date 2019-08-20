@@ -120,7 +120,7 @@ class WechatController extends Controller
         $appid="wx4dbcb6925b134ec2";
         $appsecret="03d94930a4cbca1987e966c66e5b6a50";
         $req=$request->all();
-        // dd($req);
+        dd($req);
         $code=$req['code'];
         //获取access_token
         $url=file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WECHAT_APPID')."&secret=".env('WECHAT_APPSECRET')."&code=".$code."&grant_type=authorization_code");
