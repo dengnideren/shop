@@ -16,6 +16,29 @@ class Wechat{
         $user_info = json_decode($wechat_user,1);
         return $user_info;
     }
+    /**
+     * 获取jsapi_ticket并且缓存
+     */
+    public function jsapi_ticket()
+    {
+        //获取access_token
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1','6379');
+        $jsapi_ticket_key = 'jsapi_ticket';
+        if($redis->exists($jsapi_ticket_key)){
+            //去缓存拿
+            $jsapi_ticket = $redis->get($jsapi_ticket_key);
+        }else{
+            //去微信接口拿
+            $jsapi_re = file_get_contents("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=".$this->get_access_token()."&type=jsapi");
+            $jsapi_result = json_decode($jsapi_re,1);
+            $jsapi_ticket = $jsapi_result['ticket'];
+            $expire_time = $jsapi_result['expires_in'];
+            //加入缓存
+            $redis->set($jsapi_ticket_key,$jsapi_ticket,$expire_time);
+        }
+        return $jsapi_ticket;
+    }
     // 根据标签id获取标签粉丝
     public function mark_user($tag_id){
         $url = 'https://api.weixin.qq.com/cgi-bin/user/tag/get?access_token='.$this->get_access_token();
