@@ -13,9 +13,9 @@
             <option value="1">一级菜单</option>
             <option value="2">二级菜单</option>
         </select><br/><br/>
-        一级菜单：<input type="text" name="menu_name" style="width: 300px"><br/><br/>
-        二级菜单：<input type="text" name="second_menu_name" style="width: 300px"><br/><br/>
-        菜单标识：<input type="text" name="menu_tag" style="width:300px"><br/><br/>
+        菜单名称：<input type="text" name="menu_name" style=width: 300px><br/><br/>
+        二级菜单名称：<input type="text" name="second_menu_name" style=width: 300px><br/><br/>
+        菜单标识（标识或url）：<input type="text" name="menu_tag" style=width: 600px><br/><br/>
         事件类型：<select name="event_type" >
             <option value="click">click</option>
             <option value="view">view</option>
@@ -36,8 +36,8 @@
         <tr>
             <td width="7%">菜单结构</td>
             <td width="7%">菜单编号</td>
-            <td width="10%">一级菜单</td>
-            <td width="10%">二级菜单</td>
+            <td width="10%">菜单名称</td>
+            <td width="10%">二级菜单名</td>
             <td>菜单等级</td>
             <td>事件类型</td>
             <td>菜单标识</td>
@@ -52,7 +52,7 @@
             <td>{{$v['menu_type']}}</td>
             <td>{{$v['event_type']}}</td>
             <td>{{$v['menu_tag']}}</td>
-            <td><a href="{{url('menu/del_menu')}}">删除</a></td>
+            <td><a href="">删除</a></td>
         </tr>
         @endforeach
     </table>

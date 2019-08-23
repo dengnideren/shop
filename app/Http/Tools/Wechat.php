@@ -5,19 +5,20 @@ use GuzzleHttp\Client;
 class Wechat{
     public  $request;
     public  $client;
+    public  $app;
     public function __construct(Request $request,Client $client)
     {
         $this->request = $request;
         $this->client = $client;
+        $this->app = $app = app('wechat.official_account');
     }
     public function wechat_user_info($openid){
         $access_token = $this->get_access_token();
         $wechat_user = file_get_contents("https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN");
         $user_info = json_decode($wechat_user,1);
         return $user_info;
-    }
-    /**
-     * 获取jsapi_ticket并且缓存
+    }/**
+         * 获取jsapi_ticket并且缓存
      */
     public function jsapi_ticket()
     {
@@ -175,7 +176,6 @@ class Wechat{
             //加入缓存
             $redis->set($access_token_key,$access_token,$expire_time);
         }
-
-         return $access_token;
+        return $access_token;
     }
 }

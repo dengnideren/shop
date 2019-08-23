@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\home;
 use App\Http\Controllers\Controller;
 use App\Http\Tools\Wechat;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Storage;
 use DB;
 class MenuController extends Controller
 {
@@ -23,13 +20,16 @@ class MenuController extends Controller
         //echo "<pre>";
         $menu_info = DB::connection('mysql')->table('menu')->groupBy('menu_name')->select(['menu_name'])->orderBy('menu_name')->get()->toArray();
         $info = [];
+        //显示菜单结构
         foreach($menu_info as $k=>$v){
             $sub_menu = DB::connection('mysql')->table('menu')->where(['menu_name'=>$v->menu_name])->orderBy('menu_name')->get()->toArray();
+            //echo "<pre>";print_r($sub_menu);
             if(!empty($sub_menu[0]->second_menu_name)){
+                //二级菜单
                 $info[] = [
                     'menu_str'=>'|',
                     'menu_name'=>$v->menu_name,
-                    'menu_type'=>1,
+                    'menu_type'=>2,
                     'second_menu_name'=>'',
                     'menu_num'=>0,
                     'event_type'=>'',
@@ -40,11 +40,11 @@ class MenuController extends Controller
                     $info[] = (array)$vo;
                 }
             }else{
+                //一级菜单
                 $sub_menu[0]->menu_str = '|';
                 $info[] = (array)$sub_menu[0];
             }
         }
-        // dd($info);
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/get?access_token='.$this->wechat->get_access_token();
         $re = file_get_contents($url);
         //print_r(json_decode($re,1));
@@ -56,7 +56,7 @@ class MenuController extends Controller
     public function do_add_menu(Request $request)
     {
         $req = $request->all();
-        // dd($req);
+        //echo "<pre>";print_r($req);
         $data = [];
         $result = DB::connection('mysql')->table('menu')->insert([
             'menu_name' => $req['menu_name'],
@@ -66,9 +66,8 @@ class MenuController extends Controller
             'menu_tag'=>$req['menu_tag']
         ]);
         if($req['menu_type'] == 1){ //一级菜单
-            $first_menu_count = DB::connection('mysql')->table('menu')->where(['menu_type'=>1])->count();
+            //$first_menu_count = DB::connection('mysql_cart')->table('menu')->where(['menu_type'=>1])->count();
         }
-        // dd();
         $this->reload_menu();
     }
     /**
@@ -89,6 +88,7 @@ class MenuController extends Controller
         $menu_info = DB::connection('mysql')->table('menu')->groupBy('menu_name')->select(['menu_name'])->orderBy('menu_name')->get()->toArray();
         foreach($menu_info as $v){
             $menu_list = DB::connection('mysql')->table('menu')->where(['menu_name'=>$v->menu_name])->get()->toArray();
+            //echo "<pre>"; print_r($menu_list);
             $sub_button = [];
             foreach($menu_list as $k=>$vo){
                 if($vo->menu_type == 1){ //一级菜单
@@ -130,16 +130,44 @@ class MenuController extends Controller
         }
         // echo "<pre>";print_r($data);
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->wechat->get_access_token();
+        /*$data = [
+            'button' => [
+                [
+                    'type'=>'click',
+                    'name'=>'今日歌曲',
+                    'key'=>'V1001_TODAY_MUSIC'
+                ],
+                [
+                    'name'=>'菜单',
+                    'sub_button' =>[
+                        [
+                            'type'=>'view',
+                            'name'=>'搜索',
+                            'url'=>'http://www.soso.com/'
+                        ],
+                        [
+                            "type"=>"click",
+                            "name"=>"赞一下我们",
+                            "key"=>"V1001_GOOD"
+                        ]
+                    ]
+                ],
+                [
+                    'type'=>'click',
+                    'name'=>'明日歌曲',
+                    'key'=>'V1001_TODAY_MUSIC111'
+                ]
+            ],
+        ];*/
         $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
+        // dd($re);
         echo json_encode($data,JSON_UNESCAPED_UNICODE).'<br/>';
         echo "<pre>"; print_r(json_decode($re,1));
     }
     /**
      * 完全删除菜单
      */
-    public function del_menu(Request $request){
-        // $data=$request->all()['id'];
-        // dd($data);
+    public function del_menu(){
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/delete?access_token='.$this->wechat->get_access_token();
         $re = file_get_contents($url);
         dd(json_decode($re));
