@@ -10,7 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/oil/event','Home\OilController@event');
+//油价
+Route::get('/wechat/oil','Home\WechatController@oil');
 Route::get('/love/send','Home\LoveController@send');//表白添加视图
 Route::post('/love/send_do','Home\LoveController@send_do');//表白添加视图
 // 留言授权登录

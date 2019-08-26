@@ -26,15 +26,17 @@ class WechatController extends Controller
     public function event()
     {
         //$this->checkSignature();
-         $data = file_get_contents("php://input");
+        $data = file_get_contents("php://input");
         //解析XML
         $xml = simplexml_load_string($data,'SimpleXMLElement', LIBXML_NOCDATA);        //将 xml字符串 转换成对象
         $xml = (array)$xml; //转化成数组
+        //echo "<pre>";print_r($xml);
+        \Log::Info(json_encode($xml));  //输出收到的信息
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
         if($xml['MsgType'] == 'event'){
             if($xml['Event'] == 'subscribe'){ //关注
-                if(isset($xml['EventKey'])){
+                if(!empty($xml['EventKey'])){
                     //拉新操作
                     $agent_code = explode('_',$xml['EventKey'])[1];
                     $agent_info = DB::connection('mysql')->table('user_agent')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
@@ -46,16 +48,26 @@ class WechatController extends Controller
                         ]);
                     }
                 }
-                $message = '你好!';
+                $message = '欢迎使用本公司提供的油价查询功能!';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
-            }
         }elseif($xml['MsgType'] == 'text'){
-            $message = '你好!';
+            $message = '欢迎使用本公司提供的油价查询功能!';
             $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
             echo $xml_str;
         }
         //echo $_GET['echostr'];
+    }
+    //获取油价信息
+    public function oil()
+    {
+        // dd($city);
+        $url="http://apis.juhe.cn/cnoil/oil_city?key=e7f0962f6950528ab806e91a5f23ca22";
+        // dd($url);
+        $re=file_get_contents($url);
+        // dd($re);
+        $data=json_decode($re,1);
+        // dd($data);
     }
     public function get_user_info()
     {
