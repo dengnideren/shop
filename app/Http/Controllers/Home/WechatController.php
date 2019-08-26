@@ -15,10 +15,13 @@ class WechatController extends Controller
 {
     public $request;
     public $wechat;
+    public $redis;
     public function __construct(Request $request,Wechat $wechat)
     {
         $this->request = $request;
         $this->wechat = $wechat;
+        $this->redis = new \Redis();
+        $this->redis->connect('127.0.0.1','6379');
     }
     /**
      * 微信消息推送
@@ -48,7 +51,7 @@ class WechatController extends Controller
                         ]);
                     }
                 }
-                $message = '你好!';
+                $message = '欢迎使用本公司提供的油价查询功能';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
             }elseif($xml['Event'] == 'location_select'){
@@ -58,7 +61,7 @@ class WechatController extends Controller
                 echo $xml_str;
             }elseif($xml['Event'] == 'CLICK'){
                 if($xml['EventKey'] == 'my_biaobai'){
-                    $biaobai_info = DB::connection('mysql_cart')->table('biaobai')->where(['from_user'=>$xml['FromUserName']])->get()->toArray();
+                    $biaobai_info = DB::connection('mysql')->table('biaobai')->where(['from_user'=>$xml['FromUserName']])->get()->toArray();
                     $message = '';
                     foreach($biaobai_info as $v){
                         $message .= $v->content."\n";
@@ -72,6 +75,7 @@ class WechatController extends Controller
             if($preg_result){
                 //查询油价
                 $city = substr($xml['Content'],0,-6);
+                // dd($city);
                 $price_info = file_get_contents('http://shopdemo.18022480300.com/price/api');
                 $price_arr = json_decode($price_info,1);
                 $support_arr = [];
@@ -111,17 +115,6 @@ class WechatController extends Controller
             echo $xml_str;*/
         }
         //echo $_GET['echostr'];  //第一次访问
-    }
-    //获取油价信息
-    public function oil()
-    {
-        // dd($city);
-        $url="http://apis.juhe.cn/cnoil/oil_city?key=e7f0962f6950528ab806e91a5f23ca22";
-        // dd($url);
-        $re=file_get_contents($url);
-        // dd($re);
-        $data=json_decode($re,1);
-        // dd($data);
     }
     public function get_user_info()
     {
