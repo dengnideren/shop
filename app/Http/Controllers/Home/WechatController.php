@@ -51,7 +51,16 @@ class WechatController extends Controller
                         ]);
                     }
                 }
-                $message = '欢迎使用本公司提供的油价查询功能';
+                $access_token=$this->wechat->get_access_token();
+                $info=$this->get_user_list();
+                // return $info;
+                // // dd($id);
+                $openid="oSfq3tw5hR-WgJzH314-p0CVqjFA";
+                // dd($openid);
+                // foreach($info['data']['openid'] as $v){
+                $wechat=file_get_contents("https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN");
+                    $user_info=json_decode($wechat,1);
+                $message = '欢迎'.$user_info['nickname'].'同学，感谢您的关注';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
             }elseif($xml['Event'] == 'location_select'){
