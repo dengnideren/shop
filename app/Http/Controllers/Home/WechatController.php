@@ -44,14 +44,14 @@ class WechatController extends Controller
                     $agent_code = explode('_',$xml['EventKey'])[1];
                     $agent_info = DB::connection('mysql')->table('user_agent')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
                     if(empty($agent_info)){
-                        DB::connection('mysql')->table('user_agent')->insert([
+                        DB::table('user_agent')->insert([
                             'uid'=>$agent_code,
                             'openid'=>$xml['FromUserName'],
                             'add_time'=>time()
                         ]);
                     }
                 }
-                $message = '欢迎使用本公司提供的油价查询功能';
+                $message = '欢迎'.$xml['FromUserName'].'同学，感谢您的关注';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
             }elseif($xml['Event'] == 'location_select'){
