@@ -54,13 +54,16 @@ class WechatController extends Controller
     }
     public function qunfa()
     {
-        $url='https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN'.$this->wechat->get_access_token();
+        $url='https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$this->wechat->get_access_token();
+        // dd($url);
         $data = [
             'touser' =>['Otv1tNIEIjRJUTXM3wng','oSfq3t3mui27VP6UMPPJpK3XJqvA','oSfq3t78eVyC-kqfsm3Y2K8IUH5g','oSfq3tw5hR-WgJzH314-p0CVqjFA'],
             "msgtype"=>'text',
-            "text"=>['content'=>['尊敬的用户您好，目前公司开展签到送积分兑换活动，详情进入公众号查看。']],
+            "text"=>['content'=>'尊敬的用户您好，目前公司开展签到送积分兑换活动，详情进入公众号查看。'],
         ];
-        $re = $this->wechat->post($url,json_encode($data));
+
+        $json=json_encode($data,JSON_UNESCAPED_UNICODE);
+        $re = $this->wechat->post($url,$json);
        // echo '<pre>';
        // dd($re);
        print_r(json_decode($re,1));
