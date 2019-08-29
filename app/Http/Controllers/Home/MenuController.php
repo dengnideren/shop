@@ -130,7 +130,7 @@ class MenuController extends Controller
         }
         // echo "<pre>";print_r($data);
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->wechat->get_access_token();
-        /*$data = [
+        $data = [
             'button' => [
                 [
                     'type'=>'click',
@@ -158,7 +158,7 @@ class MenuController extends Controller
                     'key'=>'V1001_TODAY_MUSIC111'
                 ]
             ],
-        ];*/
+        ];
         $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
         // dd($re);
         echo json_encode($data,JSON_UNESCAPED_UNICODE).'<br/>';
