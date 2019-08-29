@@ -11,7 +11,6 @@
         @csrf
         菜单类型：<select name="menu_type" >
             <option value="1">一级菜单</option>
-            <option value="2">二级菜单</option>
         </select><br/><br/>
         菜单名称：<input type="text" name="menu_name" style=width: 300px><br/><br/>
         二级菜单名称：<input type="text" name="second_menu_name" style=width: 300px><br/><br/>
