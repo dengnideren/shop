@@ -37,7 +37,20 @@ class WechatController extends Controller
         \Log::Info(json_encode($xml));  //输出收到的信息
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
+        if($xml['MsgType'] == 'event'){
             if($xml['Event'] == 'subscribe'){ //关注
+                if(!empty($xml['EventKey'])){
+                    //拉新操作
+                    $agent_code = explode('_',$xml['EventKey'])[1];
+                    $agent_info = DB::connection('mysql')->table('qiandao')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
+                    if(empty($agent_info)){
+                        DB::connection('mysql')->table('qiandao')->insert([
+                            'uid'=>$agent_code,
+                            'openid'=>$xml['FromUserName'],
+                            'add_time'=>time()
+                        ]);
+                    }
+                }
                 $access_token=$this->wechat->get_access_token();
                 $info=$this->get_user_list();
                 // return $info;
@@ -51,6 +64,7 @@ class WechatController extends Controller
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
             }
+        }
     }
     public function qunfa()
     {
