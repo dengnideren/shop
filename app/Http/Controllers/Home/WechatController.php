@@ -137,6 +137,7 @@ class WechatController extends Controller
        // echo '<pre>';
        // dd($re);
        print_r(json_decode($re,1));
+        dd($data);
     }
     public function get_user_info()
     {
