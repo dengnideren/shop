@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/wechat/qunfa','Home\WechatController@qunfa');
 //油价
 Route::get('/wechat/oil','Home\WechatController@oil');
 Route::get('/love/send','Home\LoveController@send');//表白添加视图
