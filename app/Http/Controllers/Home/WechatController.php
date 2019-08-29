@@ -110,8 +110,8 @@ class WechatController extends Controller
         // return $user_info;
         $data=DB::table('wechat_openid')->get()->toarray();
         // dd($data);
-        return view('home/wechat',['wechat'=>$data]);
-        // return $user_info;
+        // return view('home/wechat',['wechat'=>$data]);
+        return $user_info;
     }
     //用户详情
     public function wechatadd(Request $request)
