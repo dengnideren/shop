@@ -134,27 +134,12 @@ class MenuController extends Controller
             'button' => [
                 [
                     'type'=>'click',
-                    'name'=>'今日歌曲',
+                    'name'=>'积分查询',
                     'key'=>'V1001_TODAY_MUSIC'
                 ],
                 [
-                    'name'=>'菜单',
-                    'sub_button' =>[
-                        [
-                            'type'=>'view',
-                            'name'=>'搜索',
-                            'url'=>'http://www.soso.com/'
-                        ],
-                        [
-                            "type"=>"click",
-                            "name"=>"赞一下我们",
-                            "key"=>"V1001_GOOD"
-                        ]
-                    ]
-                ],
-                [
                     'type'=>'click',
-                    'name'=>'明日歌曲',
+                    'name'=>'签到',
                     'key'=>'V1001_TODAY_MUSIC111'
                 ]
             ],

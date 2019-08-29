@@ -37,7 +37,6 @@ class WechatController extends Controller
         \Log::Info(json_encode($xml));  //输出收到的信息
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
-        if($xml['MsgType'] == 'event'){
             if($xml['Event'] == 'subscribe'){ //关注
                 $access_token=$this->wechat->get_access_token();
                 $info=$this->get_user_list();
