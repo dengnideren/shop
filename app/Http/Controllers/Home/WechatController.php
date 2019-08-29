@@ -39,16 +39,23 @@ class WechatController extends Controller
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
         if($xml['MsgType'] == 'event'){
             if($xml['Event'] == 'subscribe'){ //关注
-                       $res=DB::connection('mysql')->table('user_agent')->insert([
+                if(!empty($xml['EventKey'])){
+                    //拉新操作
+                    $agent_code = explode('_',$xml['EventKey'])[1];
+                    $agent_info = DB::connection('mysql')->table('user_agent')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
+                    if(empty($agent_info)){
+                        DB::connection('mysql')->table('user_agent')->insert([
                             'uid'=>$agent_code,
                             'openid'=>$xml['FromUserName'],
                             'add_time'=>time()
                         ]);
+                    }
+                }
                 $access_token=$this->wechat->get_access_token();
                 $info=$this->get_user_list();
                 // return $info;
                 // // dd($id);
-                $openid="oSfq3tw-Otv1tNIEIjRJUTXM3wng";
+                $openid="oSfq3tw5hR-WgJzH314-p0CVqjFA";
                 // dd($openid);
                 // foreach($info['data']['openid'] as $v){
                 $wechat=file_get_contents("https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN");
