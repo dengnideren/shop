@@ -44,22 +44,14 @@ class WechatController extends Controller
                     $agent_code = explode('_',$xml['EventKey'])[1];
                     $agent_info = DB::connection('mysql')->table('user_agent')->where(['uid'=>$agent_code,'openid'=>$xml['FromUserName']])->first();
                     if(empty($agent_info)){
-                        DB::table('user_agent')->insert([
+                        DB::connection('mysql')->table('user_agent')->insert([
                             'uid'=>$agent_code,
                             'openid'=>$xml['FromUserName'],
                             'add_time'=>time()
                         ]);
                     }
                 }
-                $access_token=$this->wechat->get_access_token();
-                // return $info;
-                // // dd($id);
-                $openid="oSfq3tw-Otv1tNIEIjRJUTXM3wng";
-                // dd($openid);
-                // foreach($info['data']['openid'] as $v){
-                $wechat=file_get_contents("https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN");
-                    $user_info=json_decode($wechat,1);
-                $message = '欢迎'.$user_info['nickname'].'同学，感谢您的关注';
+                $message = '欢迎使用本公司提供的油价查询功能';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
             }elseif($xml['Event'] == 'location_select'){
