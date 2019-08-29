@@ -68,6 +68,25 @@ class MenuController extends Controller
         if($req['menu_type'] == 1){ //一级菜单
             //$first_menu_count = DB::connection('mysql_cart')->table('menu')->where(['menu_type'=>1])->count();
         }
+        $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->wechat->get_access_token();
+        $data = [
+            'button' => [
+                [
+                    'type'=>'click',
+                    'name'=>'积分查询',
+                    'key'=>'V1001_TODAY_MUSIC'
+                ],
+                [
+                    'type'=>'click',
+                    'name'=>'签到',
+                    'key'=>'V1001_TODAY_MUSIC111'
+                ]
+            ],
+        ];
+        $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
+        // dd($re);
+        echo json_encode($data,JSON_UNESCAPED_UNICODE).'<br/>';
+        echo "<pre>"; print_r(json_decode($re,1));
         $this->reload_menu();
     }
     /**
