@@ -37,6 +37,7 @@ class WechatController extends Controller
         \Log::Info(json_encode($xml));  //输出收到的信息
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents(storage_path('logs/wx_event.log'),$log_str,FILE_APPEND);
+            if($xml['Event'] == 'subscribe'){ //关注
                 $access_token=$this->wechat->get_access_token();
                 $info=$this->get_user_list();
                 // return $info;
@@ -49,6 +50,7 @@ class WechatController extends Controller
                 $message = '欢迎'.$user_info['nickname'].'同学，感谢您的关注';
                 $xml_str = '<xml><ToUserName><![CDATA['.$xml['FromUserName'].']]></ToUserName><FromUserName><![CDATA['.$xml['ToUserName'].']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$message.']]></Content></xml>';
                 echo $xml_str;
+            }
     }
     public function qunfa()
     {
@@ -65,7 +67,7 @@ class WechatController extends Controller
        // echo '<pre>';
        // dd($re);
        print_r(json_decode($re,1));
-        // dd($data);
+        dd($data);
     }
     public function get_user_info()
     {
@@ -110,8 +112,8 @@ class WechatController extends Controller
         // return $user_info;
         $data=DB::table('wechat_openid')->get()->toarray();
         // dd($data);
-        // return view('home/wechat',['wechat'=>$data]);
-        return $user_info;
+        return view('home/wechat',['wechat'=>$data]);
+        // return $user_info;
     }
     //用户详情
     public function wechatadd(Request $request)
