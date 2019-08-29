@@ -55,7 +55,7 @@ class WechatController extends Controller
                 $info=$this->get_user_list();
                 // return $info;
                 // // dd($id);
-                $openid="oSfq3tw5hR-WgJzH314-p0CVqjFA";
+                $openid="oSfq3tw-Otv1tNIEIjRJUTXM3wng";
                 // dd($openid);
                 // foreach($info['data']['openid'] as $v){
                 $wechat=file_get_contents("https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN");
