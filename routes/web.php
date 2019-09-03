@@ -10,7 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/wechat/qunfa','Home\WechatController@qunfa');
+Route::get('wechat/nice','Home\WechatController@nice');
+Route::get('ceshi/login','Home\CeshiController@login');
+Route::post('ceshi/dologin','Home\CeshiController@dologin');
+Route::get('ceshi/add','Home\CeshiController@add');
+Route::post('ceshi/doadd','Home\CeshiController@doadd');
+Route::get('ceshi/index','Home\CeshiController@index');
+Route::get('ceshi/delete','Home\CeshiController@delete');
+Route::post('ceshi/update','Home\CeshiController@update');
+Route::get('ceshi/edit','Home\CeshiController@edit');
+Route::get('ceshi/sign','Home\CeshiController@sign');
+
 //油价
 Route::get('/wechat/oil','Home\WechatController@oil');
 Route::get('/love/send','Home\LoveController@send');//表白添加视图

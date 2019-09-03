@@ -540,4 +540,22 @@ class WechatController extends Controller
         $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
         dd(json_decode($re,1));
     }
+    public function nice()
+    {
+        $name="赵世伟";
+        $age="21";
+        $phone="16607442127";
+        $arr = array($name,$age,$phone);
+        sort($arr,SORT_STRING);
+        $tmpStr = implode($arr);//拼接字符串
+        $tmpStr = sha1($tmpStr);//得到最终加密签名
+        // dd($tmpStr);
+        $res=json_encode($tmpStr);
+        // dd($res);
+        if($res){
+            echo 1;
+        }else{
+            echo 0;
+        }
+    }
 }
