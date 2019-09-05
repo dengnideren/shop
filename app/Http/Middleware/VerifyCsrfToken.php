@@ -23,5 +23,6 @@ class VerifyCsrfToken extends Middleware
         'notify_url','return_url',
         'news_info',
         'wechat/event',
+        '*',
     ];
 }

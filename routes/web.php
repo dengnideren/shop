@@ -10,6 +10,20 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::any('add',function(){
+    return view('member.add');
+});
+Route::any('mem/index',function(){
+    return view('member.index');
+});
+Route::any('mem/update',function(){
+    return view('member.update');
+});
+//定义restful风格路由
+Route::resource('/app/member','App\MemberController');
+//调用接口
+Route::get('wechat/ok','Home\WechatController@ok');
+//自定义接口
 Route::get('wechat/nice','Home\WechatController@nice');
 Route::get('ceshi/login','Home\CeshiController@login');
 Route::post('ceshi/dologin','Home\CeshiController@dologin');
@@ -134,69 +148,69 @@ Route::get('/guessend','Admin\GuessController@guessend');
 Route::get('/guessenddo','Admin\GuessController@guessenddo');
 Route::get('/guessbai','Admin\GuessController@guessbai');
 
-Route::get('/strator/question','Home\StratorController@question');
-Route::post('/strator/questionadd','Home\StratorController@questionadd');
-Route::post('/duoxuan','Home\StratorController@duoxuan');
-Route::post('/panduan','Home\StratorController@panduan');
-Route::get('/strator','Home\StratorController@strator');
-Route::post('/strator/stratordo','Home\StratorController@stratordo');
-Route::get('/strator/list','Home\StratorController@stratorlist');
-Route::get('/fly','Home\StratorController@fly');
-//添加
-Route::get('/admin/create','Admin\CheckController@create');
-//执行添加
-Route::post('/admin/save','Admin\CheckController@save');
-//列表
-Route::get('/index','Home\CheckoutController@index');
-Route::get('home/question','Home\CheckedController@question');
-Route::get('/', function () {
-    return view('welcome');
-});
-//支付宝支付
-Route::get('/pay','PayController@do_pay');
-//登录
-Route::get('/home/login','Home\LoginController@login');
-Route::post('/home/dologin','Home\LoginController@dologin');
-//注册
-Route::get('/home/register','Home\LoginController@register');
-Route::post('/home/doregister','Home\LoginController@doregister');
-//商品添加文件上传
-Route::get('/goods/addgoods','Admin\GoodsController@addgoods');
-Route::post('/goods/doaddgoods','Admin\GoodsController@doaddgoods');
-//商品列表
-Route::get('/goods/index','Admin\GoodsController@index');
-//商品删除
-Route::get('/goods/delete','Admin\GoodsController@delete');
-Route::post('/goods/update','Admin\GoodsController@update');
-//调用中间件
-Route::group(['middleware'=>['update']],function(){
-    Route::get('/goods/edit','Admin\GoodsController@edit');
-});
-//前台首页
-Route::get('/home/index','Home\IndexController@index');
-Route::get('/home/add','Home\IndexController@add');
-//前台详情页
-Route::get('/home/single','Home\IndexController@single');
-//购物车
-Route::get('/home/cart_do','Home\IndexController@cart_do');
-Route::get('/home/cart','Home\IndexController@cart');
-//确认订单
-Route::get('/home/listdo','Home\IndexController@listdo');
-//添加订单
-Route::get('/home/listadd','Home\IndexController@listadd');
-//订单列表
-Route::get('return_url','PayController@return_url');
-//学生列表
-Route::get('/student/index','StudentController@index');
-//添加视图
-Route::get('/student/create','StudentController@create');
-//添加处理
-Route::post('/student/save','StudentController@save');
-//删除
-Route::get('/student/delete','StudentController@delete');
-//修改视图
-Route::get('/student/edit','StudentController@edit');
-//处理修改
-Route::post('/student/update','StudentController@update');
+// Route::get('/strator/question','Home\StratorController@question');
+// Route::post('/strator/questionadd','Home\StratorController@questionadd');
+// Route::post('/duoxuan','Home\StratorController@duoxuan');
+// Route::post('/panduan','Home\StratorController@panduan');
+// Route::get('/strator','Home\StratorController@strator');
+// Route::post('/strator/stratordo','Home\StratorController@stratordo');
+// Route::get('/strator/list','Home\StratorController@stratorlist');
+// Route::get('/fly','Home\StratorController@fly');
+// //添加
+// Route::get('/admin/create','Admin\CheckController@create');
+// //执行添加
+// Route::post('/admin/save','Admin\CheckController@save');
+// //列表
+// Route::get('/index','Home\CheckoutController@index');
+// Route::get('home/question','Home\CheckedController@question');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+// //支付宝支付
+// Route::get('/pay','PayController@do_pay');
+// //登录
+// Route::get('/home/login','Home\LoginController@login');
+// Route::post('/home/dologin','Home\LoginController@dologin');
+// //注册
+// Route::get('/home/register','Home\LoginController@register');
+// Route::post('/home/doregister','Home\LoginController@doregister');
+// //商品添加文件上传
+// Route::get('/goods/addgoods','Admin\GoodsController@addgoods');
+// Route::post('/goods/doaddgoods','Admin\GoodsController@doaddgoods');
+// //商品列表
+// Route::get('/goods/index','Admin\GoodsController@index');
+// //商品删除
+// Route::get('/goods/delete','Admin\GoodsController@delete');
+// Route::post('/goods/update','Admin\GoodsController@update');
+// //调用中间件
+// Route::group(['middleware'=>['update']],function(){
+//     Route::get('/goods/edit','Admin\GoodsController@edit');
+// });
+// //前台首页
+// Route::get('/home/index','Home\IndexController@index');
+// Route::get('/home/add','Home\IndexController@add');
+// //前台详情页
+// Route::get('/home/single','Home\IndexController@single');
+// //购物车
+// Route::get('/home/cart_do','Home\IndexController@cart_do');
+// Route::get('/home/cart','Home\IndexController@cart');
+// //确认订单
+// Route::get('/home/listdo','Home\IndexController@listdo');
+// //添加订单
+// Route::get('/home/listadd','Home\IndexController@listadd');
+// //订单列表
+// Route::get('return_url','PayController@return_url');
+// //学生列表
+// Route::get('/student/index','StudentController@index');
+// //添加视图
+// Route::get('/student/create','StudentController@create');
+// //添加处理
+// Route::post('/student/save','StudentController@save');
+// //删除
+// Route::get('/student/delete','StudentController@delete');
+// //修改视图
+// Route::get('/student/edit','StudentController@edit');
+// //处理修改
+// Route::post('/student/update','StudentController@update');
 
 

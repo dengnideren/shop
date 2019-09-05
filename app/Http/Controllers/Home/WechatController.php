@@ -23,6 +23,37 @@ class WechatController extends Controller
         $this->redis = new \Redis();
         $this->redis->connect('127.0.0.1','6379');
     }
+    //自定义接口
+    public function nice()
+    {
+        $name="赵世伟";
+        $age="21";
+        $phone="16607442127";
+        $arr = array($name,$age,$phone);
+        sort($arr,SORT_STRING);
+        $tmpStr = implode($arr);//拼接字符串
+        $tmpStr = sha1($tmpStr);//得到最终加密签名
+        // dd($tmpStr);
+        $res=json_encode($tmpStr);
+        // dd($res);
+        if($res){
+            return json_encode(['code'=>1,'msg'=>'ok']);
+        }else{
+            return json_encode(['code'=>0,'msg'=>'no']);
+        }
+    }
+    //调用接口
+    public function ok()
+    {
+        $name="赵世伟";
+        $age="21";
+        $str=$name.$age;
+        $sign=md5('1901'.$str);
+        $sign=sha1($str);
+        $url="http://wym.yingge.fun/api/test/addUser?name={$name}&age={$age}&sign={$sign}";
+        $res=$this->wechat->post($url);
+        dd($url);
+    }
     /**
      * 微信消息推送
      */
@@ -539,23 +570,5 @@ class WechatController extends Controller
 
         $re = $this->wechat->post($url,json_encode($data,JSON_UNESCAPED_UNICODE));
         dd(json_decode($re,1));
-    }
-    public function nice()
-    {
-        $name="赵世伟";
-        $age="21";
-        $phone="16607442127";
-        $arr = array($name,$age,$phone);
-        sort($arr,SORT_STRING);
-        $tmpStr = implode($arr);//拼接字符串
-        $tmpStr = sha1($tmpStr);//得到最终加密签名
-        // dd($tmpStr);
-        $res=json_encode($tmpStr);
-        // dd($res);
-        if($res){
-            echo 1;
-        }else{
-            echo 0;
-        }
     }
 }
