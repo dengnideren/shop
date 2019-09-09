@@ -42,20 +42,53 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $name=$request->input('name');
-        $age=$request->input('age');
+        $name = $request->input('name');
+        $age = $request->input('age');
+        // var_dump($goods_name);
+        // var_dump($goods_price);die;
         if(empty($name) || empty($age)){
-            return json_encode(['code'=>500,'msg'=>'参数不能为空']);
+            return json_encode(['code'=>202,'msg'=>'参数不能为空!']);
         }
-        $res=Member::insert([
+
+
+        $goods_img = $_FILES['file'];
+        // var_dump($goods_img);die;
+        $allowType = ['image/jpeg','image/jpg','image/png'];
+        if(!in_array($goods_img['type'], $allowType)){
+            return json_encode(['code'=>205,'msg'=>'文件格式错误!']);die;
+        }
+        // 判断文件大小
+        if($goods_img['size'] > 1024*1024*2){
+            return json_encode(['code'=>206,'msg'=>'上传文件过大!']);die;
+        }
+        // 判断错误号是否为0
+        if($goods_img['error'] != 0){
+            return json_encode(['code'=>207,'msg'=>'文件上传错误!']);die;
+        }
+        $ext = pathinfo($goods_img['name'],PATHINFO_EXTENSION); //后缀名
+        $new_name = md5(time().rand(1000,9999)).".".$ext; // 生成新的文件名
+
+
+        // 生成一个基于当前日期的文件夹
+        $date = date("Y-n-j");
+        if(!file_exists("./img/".$date)){
+            mkdir("./img/".$date);
+        }
+        $dest = "./img/".$date."/".$new_name;
+        // 文件信息
+        move_uploaded_file($goods_img['tmp_name'], $dest);  //在当前文件下 img文件下 根据日期建立文件夹进行存储
+
+
+        $res =Member::insert([
             'name'=>$name,
             'age'=>$age,
+            'pic'=>$dest
         ]);
-        // dd($res);
+        // var_dump($res);die;
         if($res){
-            return json_encode(['code'=>200,'msg'=>'添加成功']);
+            return json_encode(['code'=>200,'msg'=>'添加成功!']);
         }else{
-            return json_encode(['code'=>201,'msg'=>'添加失败']);
+            return json_encode(['code'=>201,'msg'=>'添加失败!']);
         }
     }
 
@@ -123,10 +156,13 @@ class MemberController extends Controller
     public function destroy($id)
     {
         // $data=$request->input('id');
+        $data=Member::where(['id'=>$id])->first()->toArray();
+        $image=$data['pic'];
         // dd($data);
         $res=Member::where(['id'=>$id])->delete();
         // dd($res);
         if($res){
+            unlink($image);
             return json_encode(['code'=>200,'msg'=>'删除成功']);
         }else{
             return json_encode(['code'=>201,'msg'=>'删除失败']);

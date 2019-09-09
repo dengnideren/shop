@@ -9,8 +9,9 @@
         <table border="1" class="table table-bordered">
             <tr >
                 <td class="col-sm-2">id</td>
-                <td class="col-sm-2">姓名</td>
-                <td class="col-sm-2">年龄</td>
+                <td class="col-sm-2">商品名称</td>
+                <td class="col-sm-2">商品价格</td>
+                <td class="col-sm-2">商品图片</td>
                 <td class="col-sm-2">操作</td>
             </tr>
             <tbody class="index">
@@ -18,7 +19,7 @@
             </tbody>
             
         </table>
-        <a href="http://www.shop.com/add" class="btn btn-success">添加</a>
+        <a href="http://www.shop.com/goods/add" class="btn btn-success">添加</a>
         <nav aria-label="Page navigation">
           <ul style="color:red" class="pagination">
 <!--             <li><a href="#">1</a></li>
@@ -31,7 +32,7 @@
 
     <script src="/jquery.js"></script>
     <script type="text/javascript">
-        var url="http://www.shop.com/app/member";
+        var url="http://www.shop.com/app/goods";
         // alert(url);
         $.ajax({
             url:url,
@@ -42,27 +43,6 @@
                 mypage(res);
             }
         })
-        //删除
-        $(document).on('click','.del',function(){
-            var id=$(this).attr('id');
-            // alert(id);
-            $.ajax({
-                url:url+'/'+id,
-                dataType:"json",
-                type:'DELETE',
-                success:function(res){
-                    alert(res.msg);
-                    // return;
-                    location.href="http://www.shop.com/mem/index";
-                }
-            })
-        })
-        //修改
-        $(document).on('click','.update',function(){
-            var id=$(this).attr('id');
-            // alert(id);
-            location.href="http://www.shop.com/mem/update?id="+id;
-        })
         //搜索
         $(document).on('click','.sou',function(){
             // alert(111);
@@ -70,7 +50,7 @@
             // console.log(search);
             if(search==""){
                 alert('请输入查询姓名');
-                location.href="http://www.shop.com/mem/index";
+                location.href="http://www.shop.com/goods/index";
             }
             $.ajax({
                 url:url,
@@ -101,9 +81,9 @@
                         $.each(res.data.data,function(i,v){
                         var tr = $("<tr></tr>"); //构建一个空对象
                         tr.append("<td>"+v.id+"</td>");
-                        tr.append("<td>"+v.name+"</td>");
-                        tr.append("<td>"+v.age+"</td>");
-                        tr.append("<td align='center'><img src='/"+ v.pic+"' alt='暂无图片' width='50'></td>");
+                        tr.append("<td>"+v.goods_name+"</td>");
+                        tr.append("<td>"+v.goods_price+"</td>");
+                        tr.append("<td align='center'><img src='/"+ v.goods_pic+"' alt='暂无图片' width='50'></td>");
                         tr.append("<td><a href='javascript:;' id='"+v.id+"' class='del btn btn-danger'>删除</a> <a href='javascript:;' id='"+v.id+"' class='update btn btn-info'>编辑</a></td>");
                             $(".index").append(tr);
                     })
@@ -116,3 +96,4 @@
         }
     </script>
 @endsection
+

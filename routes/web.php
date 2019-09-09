@@ -19,8 +19,15 @@ Route::any('mem/index',function(){
 Route::any('mem/update',function(){
     return view('member.update');
 });
+Route::any('goods/add',function(){
+    return view('goods.add');
+});
+Route::any('goods/index',function(){
+    return view('goods.index');
+});
 //定义restful风格路由
 Route::resource('/app/member','App\MemberController');
+Route::resource('/app/goods','App\GoodsController');
 //调用接口
 Route::get('wechat/ok','Home\WechatController@ok');
 //自定义接口

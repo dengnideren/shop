@@ -49,10 +49,10 @@ class WechatController extends Controller
         $age="21";
         $str=$name.$age;
         $sign=md5('1901'.$str);
-        $sign=sha1($str);
         $url="http://wym.yingge.fun/api/test/addUser?name={$name}&age={$age}&sign={$sign}";
-        $res=$this->wechat->post($url);
-        dd($url);
+        $res=$this->wechat->get($url);
+        // dd($url);
+        dd($res);
     }
     /**
      * 微信消息推送
