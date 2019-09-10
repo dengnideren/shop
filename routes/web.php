@@ -30,6 +30,8 @@ Route::resource('/app/member','App\MemberController');
 Route::resource('/app/goods','App\GoodsController');
 //调用接口
 Route::get('wechat/ok','Home\WechatController@ok');
+Route::any('ce/adduser','App\CeController@addUser');
+Route::any('openssl','App\MemberController@opensslDecrypt');
 //自定义接口
 Route::get('wechat/nice','Home\WechatController@nice');
 Route::get('ceshi/login','Home\CeshiController@login');

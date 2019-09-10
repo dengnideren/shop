@@ -5,8 +5,18 @@ namespace App\Http\Controllers\App;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\model\Member;
+use App\Http\Tools\Aes;
+use App\Http\Tools\Rsa;
 class MemberController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $obj = new Aes('1234567890123456');
+    //     $url = "what are you 弄啥嘞？";
+    //     echo $eStr = $obj->encrypt($url);
+    //     echo "<hr>";
+    //     echo $obj->decrypt($eStr);
+    // }    
     /**
      * 展示
      * Display a listing of the resource.
@@ -16,10 +26,39 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $search=$request->input('search');
-        
-        // dd($search);
-        $data=Member::where('name','like','%'.$search.'%')->paginate(3);
-        // dd($data);
+        // var_dump($search);die;
+        $where=[];
+        $where1=[];
+        if(isset($search)){
+            $where[]=['name','like',"%$search%"];
+        }
+        if(isset($search)){
+            $where1[]=['age','like',"%$search%"];
+        }
+        //查询数据库
+        $data=Member::where($where)->orwhere($where1)->paginate(3)->toArray();
+        // var_dump($data);die;
+        if(isset($search)){
+            foreach($data['data'] as $k=>$v){
+                $data['data'][$k]['name']=str_replace($search, "<b style='color:red'>".$search."</b>" ,$v['name']);
+                $data['data'][$k]['age']=str_replace($search,"<b style='color:red'>".$search."</b>",$v['age']);    
+            }
+        }
+        $obj = new Aes('fdjfdsfjakfjadii');
+        $data=json_encode('authstr');
+        echo $eStr = $obj->encrypt($data);
+        // $Rsa=new Rsa();
+        // $privkey =file_get_contents('private.php');//$keys['privkey'];
+        // $pubkey  =file_get_contents('public.php');//$keys['pubkey'];
+        // $Rsa->init($privkey, $pubkey,TRUE);
+        // //原文
+        // $data = '你妈妈让你回家吃饭了';
+        // //私钥加密示例
+        // $data = json_encode($data);
+        // $data = $Rsa->priv_encode($data);
+        // // $data = json_decode($data);
+        // $data = $Rsa->pub_decode($data);
+        // return json_decode($data);die;
         return json_encode(['code'=>200,'data'=>$data]);
     }
 
@@ -77,8 +116,6 @@ class MemberController extends Controller
         $dest = "./img/".$date."/".$new_name;
         // 文件信息
         move_uploaded_file($goods_img['tmp_name'], $dest);  //在当前文件下 img文件下 根据日期建立文件夹进行存储
-
-
         $res =Member::insert([
             'name'=>$name,
             'age'=>$age,
@@ -133,13 +170,35 @@ class MemberController extends Controller
         // $id=$request->input('id');
         // dd($id);
         $name=$request->input('name');
+        // var_dump($name);die;
         $age=$request->input('age');
+        $image=$request->input('pic');
+        $n = strpos($image,',');
+        $str = substr($image, $n+1);
+        $str = base64_decode($str);  
+        // var_dump($str);die;
+        $ext = $this->check_image_type($str);  // 获取后缀 JPG
+        $ext = strtolower($ext); // 转为小写
+        $imageName = md5(time().rand(1000,9999)).'.'.$ext; // 设置生成的图片名字
+
+        $date = date("Y-n-j");    //设置图片保存路径
+        if(!file_exists("./img/".$date)){   // 判断目录是否存在 不存在就创建 并赋予777权限
+            mkdir("./img/".$date,0700);
+        }
+        $imageSrc= "./img/".$date."/". $imageName; //拼接路径和图片名称
+        $r = file_put_contents($imageSrc, $str);//生成图片 返回的是字节数
+        // var_dump($r);die;
+        $data=Member::where(['id'=>$id])->first()->toArray();
+        $image=$data['pic'];
+        // var_dump($image);die;
         $res=Member::where(['id'=>$id])->update([
             'name'=>$name,
             'age'=>$age,
+            'pic'=>$imageSrc,
         ]);
         // dd($res);
         if($res){
+            unlink($image);
             return json_encode(['code'=>200,'msg'=>'修改成功']);
         }else{
             return json_encode(['code'=>201,'msg'=>'修改失败']);
@@ -167,5 +226,21 @@ class MemberController extends Controller
         }else{
             return json_encode(['code'=>201,'msg'=>'删除失败']);
         }
+    }
+    // 判断文件格式
+    function check_image_type($image)
+    {
+        $bits = array(
+            'JPEG' => "\xFF\xD8\xFF",
+            'GIF' => "GIF",
+            'PNG' => "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a",
+            'BMP' => 'BM',
+        );
+        foreach ($bits as $type => $bit) {
+            if (substr($image, 0, strlen($bit)) === $bit) {
+                return $type;
+            }
+        }
+        return 'UNKNOWN IMAGE TYPE';
     }
 }
