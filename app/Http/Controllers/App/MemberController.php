@@ -44,8 +44,9 @@ class MemberController extends Controller
                 $data['data'][$k]['age']=str_replace($search,"<b style='color:red'>".$search."</b>",$v['age']);    
             }
         }
-        $obj = new Aes('fdjfdsfjakfjadii');
-        $data=json_encode('authstr');
+        $obj = new Aes('ashgfdsalzxcvbnm');
+        // $data=json_encode('authstr');
+        $data="name=赵世伟&age=21&mobile=18674472127";
         echo $eStr = $obj->encrypt($data);
         // $Rsa=new Rsa();
         // $privkey =file_get_contents('private.php');//$keys['privkey'];

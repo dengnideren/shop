@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Tools\Aes;
 class CeController extends Controller
 {
+
     public function ase(Request $request)
     {   
         $authstr = $request->input('authstr');
@@ -44,6 +45,7 @@ class CeController extends Controller
                 'name' => $name, 
                 'age' => $age,
                 'mobile'=>$mobile,
+                'ip'=>$ip,
             ]);
         if($res){
         	return json_encode(['code'=>200,'msg'=>'恭喜你,入库成功'],JSON_UNESCAPED_UNICODE);
