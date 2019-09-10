@@ -11,11 +11,11 @@ class CeController extends Controller
     public function addUser(Request $request)
     {   
         $authstr = $request->input('authstr');
-        $obj = new Aes('fdjfdsfjakfjadii');
+        $obj = new Aes('asdfghjklzxcvbnm');
         $authstr = $obj->decrypt($authstr); //字符串
         if(!$authstr){
             if(empty($name) || empty($age) || empty($mobile)){
-                return json_encode(['ret'=>0,'msg'=>'加密不对兄弟'],JSON_UNESCAPED_UNICODE);
+                return json_encode(['code'=>201,'msg'=>'小老弟你还嫩的很'],JSON_UNESCAPED_UNICODE);
             }
         }
         $authArr = explode("&",$authstr);
@@ -30,14 +30,14 @@ class CeController extends Controller
         $mobile = empty($args['mobile']) ? "" : $args['mobile'];
  
         if(empty($name) || empty($age) || empty($mobile)){
-            return json_encode(['ret'=>0,'msg'=>'别逗我了,参数不对'],JSON_UNESCAPED_UNICODE);
+            return json_encode(['code'=>201,'msg'=>'笑死我了'],JSON_UNESCAPED_UNICODE);
         }
         $ip = $_SERVER['REMOTE_ADDR'];
  
         $data = \DB::table('test')->where(['ip'=>$ip])->first();
         //var_dump($data);die;
         if($data){
-            return json_encode(['ret'=>0,'msg'=>'当前ip已经录入数据了'],JSON_UNESCAPED_UNICODE);
+            return json_encode(['code'=>201,'msg'=>'数据已经入库了'],JSON_UNESCAPED_UNICODE);
         }
         $res = \DB::table('test')->insert(
             [
@@ -46,7 +46,7 @@ class CeController extends Controller
                 'mobile'=>$mobile,
             ]);
         if($res){
-        	return json_encode(['ret'=>1,'msg'=>'入库成功'],JSON_UNESCAPED_UNICODE);
+        	return json_encode(['code'=>200,'msg'=>'恭喜你,入库成功'],JSON_UNESCAPED_UNICODE);
         }
     }
 }
