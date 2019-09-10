@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Tools\Aes;
 class CeController extends Controller
 {
-    public function addUser(Request $request)
+    public function ase(Request $request)
     {   
         $authstr = $request->input('authstr');
         $obj = new Aes('asdfghjklzxcvbnm');
